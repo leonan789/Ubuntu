@@ -2,14 +2,14 @@
 # *****************************************************************************
 # Function:     SDcard fabrication
 # Description:  SDcard format, extract ubuntu filesystem from iso, and copy
-#               (3559/mini).run file into "/var", "/" directory in SDcard.
+#               .run file into "/var", "/" directory in SDcard.
 # Date:         2018/09/08-v0.8
-# Author:       nanweijia
+# Author:       leonan
 # Input:        1.SDcard fullname(e.g:/dev/mmcblk1)
-#               2.Path include ubuntu-xxx-server-arm64.iso and (3559/mini).run
+#               2.Path include ubuntu-xxx-server-arm64.iso and .run
 #               3.iso filename(e.g:ubuntu-16.04.3-server-arm64.iso)
-#               4.mini filename(e.g:xxx.run)
-#               5.3559 filename(e.g:xxx.run)
+#               4.e.g:xxx.run
+#               5.e.g:xxx.run
 # *****************************************************************************
 
 # ************************Variable*********************************************
@@ -75,15 +75,15 @@ function configUbuntu()
 
     recordProcess "Process" "5/6(Ubuntu user configure)"
     # 2. add user
-    #echo "hisilicon:x:1000:0::/home/hisilicon:" >> squashfs-root/etc/passwd
+    #echo "hisilicon:x:1000:0::/home/user:" >> squashfs-root/etc/passwd
     #echo "hisilicon:$6$Zlr1mw83$vw/cmjEg8vpvWj3Cenp9a78lmmx.b7UH2xVvTw32KWwLpwWGRMFb9Fiyw/DoxvaxWIQdz7CkUGjx/cujDkuQR/:17775:0:99999:7:::" >> squashfs-root/etc/shadow
-    #cp -r squashfs-root/etc/skel squashfs-root/home/hisilicon
-    #echo "hisilicon       ALL=(ALL:ALL) ALL" >> squashfs-root/etc/sudoers
+    #cp -r squashfs-root/etc/skel squashfs-root/home/user
+    #echo "user       ALL=(ALL:ALL) ALL" >> squashfs-root/etc/sudoers
 
     # 3. config host
-    echo 'davinci-mini' > squashfs-root/etc/hostname
-    echo '127.0.0.1        localhost davinci-mini' > squashfs-root/etc/hosts
-    echo '127.0.1.1        davinci-mini' >> squashfs-root/etc/hosts
+    echo 'user' > squashfs-root/etc/hostname
+    echo '127.0.0.1        localhost user' > squashfs-root/etc/hosts
+    echo '127.0.1.1        user' >> squashfs-root/etc/hosts
 
     # 4. config ip
     echo "source /etc/network/interfaces.d/*
@@ -103,15 +103,11 @@ function configUbuntu()
     " > squashfs-root/etc/network/interfaces
 
     # 5. cp third party file 
-    #cp ${ISO_FILE_DIR}/$RUN_MINI squashfs-root/var
-    #cp ${ISO_FILE_DIR}/$RUN_3559 squashfs-root/var
-	mkdir squashfs-root/home/hisilicon/newest_version
-	cp ./newest_version/* squashfs-root/home/hisilicon/newest_version
-    #cp ./minirc_cp.sh squashfs-root/home/hisilicon/newest_version
-    #cp ./minirc_sys_init.sh squashfs-root/home/hisilicon/newest_version
+    mkdir squashfs-root/home/user/newest_version
+    cp ./newest_version/* squashfs-root/home/user/newest_version
 
-	# 6. auto-run minirc_cp.sh and minirc_sys_init.sh when start ubuntu
-	echo"#!/bin/sh -e
+    # 6. auto-run minirc_cp.sh and minirc_sys_init.sh when start ubuntu
+    echo"#!/bin/sh -e
 #
 # rc.local
 #
@@ -123,13 +119,13 @@ function configUbuntu()
 # bits.
 #
 # By default this script does nothing.
-cd /home/hisilicon/newest_version/
+cd /home/user/newest_version/
 
-chmod +x /home/hisilicon/newest_version/minirc_cp.sh
-/bin/bash /home/hisilicon/newest_version/minirc_cp.sh
+chmod +x /home/user/newest_version/minirc_cp.sh
+/bin/bash /home/user/newest_version/minirc_cp.sh
 
-chmod +x /home/hisilicon/newest_version/minirc_sys_init.sh
-/bin/bash /home/hisilicon/newest_version/minirc_sys_init.sh
+chmod +x /home/user/newest_version/minirc_sys_init.sh
+/bin/bash /home/user/newest_version/minirc_sys_init.sh
 
 exit 0
 " > squashfs-root/etc/rc.local
