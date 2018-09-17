@@ -9,15 +9,15 @@
 #               2.Path include ubuntu-xxx-server-arm64.iso and .run
 #               3.iso filename(e.g:ubuntu-16.04.3-server-arm64.iso)
 #               4.e.g:xxx.run
-#               5.e.g:xxx.run
 # *****************************************************************************
 
 # ************************Variable*********************************************
+ScriptPath=`dirname $0`
+ScriptPath=`cd $ScriptPath;pwd`
 DEV_NAME=$1
 ISO_FILE_DIR=$2
 ISO_FILE=$3
 RUN_MINI=$4
-RUN_3559=$5
 DATE=`date +"%F %X"`
 TMPDIR_SD_MOUNT=sd_mount_dir
 TMPDIR_DATE=`date +"%y%m%d%H%M%S"`
@@ -119,13 +119,10 @@ function configUbuntu()
 # bits.
 #
 # By default this script does nothing.
-cd /home/user/newest_version/
+cd /var/
 
-chmod +x /home/user/newest_version/minirc_cp.sh
-/bin/bash /home/user/newest_version/minirc_cp.sh
-
-chmod +x /home/user/newest_version/minirc_sys_init.sh
-/bin/bash /home/user/newest_version/minirc_sys_init.sh
+chmod +x /var/minirc_boot.sh
+/bin/bash /var/minirc_boot.sh /opt/mini/$RUN_MINI
 
 exit 0
 " > squashfs-root/etc/rc.local
