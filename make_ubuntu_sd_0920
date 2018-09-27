@@ -2,9 +2,9 @@
 # *****************************************************************************
 # Function:     SDcard fabrication
 # Description:  SDcard format, extract ubuntu filesystem from iso, and copy
-#               (3559/mini).run file into "/var", "/" directory in SDcard.
+#               (xxx).run file into "/var", "/" directory in SDcard.
 # Date:         2018/09/20-v1.20
-# Author:       nanweijia
+# Author:       leonan
 # Input:        1.SDcard fullname(e.g:/dev/sda)
 #               2.Path include ubuntu-xxx-server-arm64.iso and (3559/mini).rar
 #               3.iso filename(e.g:ubuntu-16.04.3-server-arm64.iso)
@@ -12,7 +12,7 @@
 # *****************************************************************************
 # Description:  Change SDcard format and configure Ubuntu step
 # Date:         2018/09/20-v1.20
-# Author:       nanweijia
+# Author:       leonan
 
 # ************************Variable*********************************************
 ScriptPath=`dirname $0`
@@ -70,7 +70,7 @@ function configUbuntu()
     touch squashfs-root/etc/apt/sources.list
     echo "deb file:/cdtmp xenial main restrict" > squashfs-root/etc/apt/sources.list
     cp $ScriptPath/chroot_install.sh ./squashfs-root
-	# 2. add user and install software
+    # 2. add user and install software
     # execute in ./chroot_install.sh
     chroot squashfs-root /bin/bash -c "./chroot_install.sh"
     umount squashfs-root/cdtmp
